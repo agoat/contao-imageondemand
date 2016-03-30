@@ -18,7 +18,8 @@
 ClassLoader::addClasses(array
 (
 	'Contao\ImageOnDemand' => 'system/modules/imageondemand/classes/ImageOnDemand.php',
-	'Contao\Picture' => 'system/modules/imageondemand/classes/Picture.php' // Overwrite Picture class
+	'Contao\Picture' => 'system/modules/imageondemand/classes/Picture.php', // Overwrite Picture class
+	'Contao\Image' => 'system/modules/imageondemand/classes/Image.php' // Overwrite Image class
 
 ));
 
