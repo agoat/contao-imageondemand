@@ -864,11 +864,9 @@ class Image
 			return '';
 		}
 		
-		
-		$objFile = new \File($src, true);
 		$static = (strncmp($src, 'assets/', 7) === 0) ? TL_ASSETS_URL : TL_FILES_URL;
 
-		return '<img src="' . $static . \System::urlEncode($src) . '" width="' . $objFile->width . '" height="' . $objFile->height . '" alt="' . specialchars($alt) . '"' . (($attributes != '') ? ' ' . $attributes : '') . '>';
+		return '<img src="' . $static . \System::urlEncode($src) . '" alt="' . specialchars($alt) . '"' . (($attributes != '') ? ' ' . $attributes : '') . '>';
 	}
 
 

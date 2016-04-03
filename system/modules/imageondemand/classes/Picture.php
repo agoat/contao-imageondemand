@@ -3,7 +3,7 @@
 /**
  * Contao Open Source CMS
  *
- * Copyright (c) 2005-2015 Leo Feyer
+ * Copyright (c) 2005-2016 Leo Feyer
  *
  * @license LGPL-3.0+
  */
@@ -15,7 +15,7 @@
  * @copyright	 Arne Stappen 2011-2015
  */
  
-
+ 
 namespace Contao;
 
 
@@ -238,6 +238,7 @@ class Picture
 		array_unshift($densities, 1);
 		$densities = array_values(array_unique($densities));
 
+		$file1x = null;
 		$attributes = array();
 		$srcset = array();
 
@@ -260,39 +261,39 @@ class Picture
 			{
 				$attributes['src'] = htmlspecialchars(TL_FILES_URL . $src, ENT_QUOTES);
 				
-				// ////// calculate the image width instead ///////////
-				$attributes['width'] = $imageSize->width * $density;
-				$attributes['height'] = $imageSize->height * $density;
+				// ////// get the image size from imageObj instead ///////////
+				$newImgSize = $imageObj->computeResize();
+				$attributes['width'] = $file1x['width'] = $newImgSize['width'];
+				$attributes['height'] = $file1x['height'] = $newImgSize['height'];
 				// ////////////////////////////////////////////////////
+
 			}
+
+			$descriptor = '1x';
 
 			if (count($densities) > 1)
 			{
 				// Use pixel density descriptors if the sizes attribute is empty
 				if (empty($imageSize->sizes))
 				{
-					$src .= ' ' . $density . 'x';
+					if ($newImgSize['width'] && $file1x['width'])
+					{
+						$descriptor = round($newImgSize['width'] / $file1x['width'], 3) . 'x';
+					}
 				}
 				// Otherwise use width descriptors
 				else
 				{
-					// ////// calculate the image width instead ///////////
-					if ($imageSize->width > 0)
-					{
-						$src .= ' ' . $imageSize->width*$density . 'w';
-					}
-					else
-					{
-						// If there is no width specified load original image
-						$fileObj = new \File(rawurldecode($imageObj->getOriginalPath()), true);
-						// and calculate the ratio to get the image width
-						$src .= ' ' . round($fileObj->width / $fileObj->height * $imageSize->height*$density) . 'w';						
-					}
-					// ////////////////////////////////////////////////////
+					$descriptor = $newImgSize['width'] . 'w';
 				}
+
+				$src .= ' ' . $descriptor;
 			}
-				
-			$srcset[] = TL_FILES_URL . $src;
+
+			if (!isset($srcset[$descriptor]))
+			{
+				$srcset[$descriptor] = TL_FILES_URL . $src;
+			}
 		}
 
 		$attributes['srcset'] = htmlspecialchars(implode(', ', $srcset), ENT_QUOTES);
