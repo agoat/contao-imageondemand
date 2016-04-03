@@ -1,0 +1,4 @@
+RewriteEngine on
+RewriteBase   /assets
+
+RewriteRule   ^images/g(.*) images.php [L]
