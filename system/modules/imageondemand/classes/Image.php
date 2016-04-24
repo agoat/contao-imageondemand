@@ -854,12 +854,12 @@ class Image
 	{
 		$src = static::getPath($src);
 
-		if ($src == '' || !is_file(TL_ROOT . '/' . $src))
+		if ($src == '')
 		{
 			return '';
 		}
 
-		if (strpos($src, '/g/') === false) // on demand images do not exist, so don´t care
+		if (!is_file(TL_ROOT . '/' . $src) && strpos($src, '/g/') === false) // on demand images do not exist, so don´t care
 		{
 			return '';
 		}
