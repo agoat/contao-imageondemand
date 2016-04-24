@@ -12,7 +12,7 @@
  * @package  	 ImageOnDemand
  * @author   	 Arne Stappen
  * @license  	 LGPL-3.0+ 
- * @copyright	 Arne Stappen 2011-2015
+ * @copyright	 Arne Stappen 2011-2016
  */
  
  
@@ -253,19 +253,16 @@ class Picture
 							->executeResize()
 							->getResizedPath();
 
-		// ////// Don´t try to get image size from file ///////
-		//	$fileObj = new \File(rawurldecode($src), true);
-		// ////////////////////////////////////////////////////
+
+			// Don´t try to get image size from file >> get the image size from imageObj instead
+			$newImgSize = $imageObj->computeResize();
 
 			if (empty($attributes['src']))
 			{
 				$attributes['src'] = htmlspecialchars(TL_FILES_URL . $src, ENT_QUOTES);
 				
-				// ////// get the image size from imageObj instead ///////////
-				$newImgSize = $imageObj->computeResize();
-				$attributes['width'] = $file1x['width'] = $newImgSize['width'];
-				$attributes['height'] = $file1x['height'] = $newImgSize['height'];
-				// ////////////////////////////////////////////////////
+				$attributes['width'] = $file1x['width'] = $newImgSize['width']; // attribute is in array (not in file object)
+				$attributes['height'] = $file1x['height'] = $newImgSize['height']; // attribute is in array (not in file object)
 
 			}
 
@@ -276,15 +273,15 @@ class Picture
 				// Use pixel density descriptors if the sizes attribute is empty
 				if (empty($imageSize->sizes))
 				{
-					if ($newImgSize['width'] && $file1x['width'])
+					if ($newImgSize['width'] && $file1x['width']) // attribute is in array (not in file object)
 					{
-						$descriptor = round($newImgSize['width'] / $file1x['width'], 3) . 'x';
+						$descriptor = round($newImgSize['width'] / $file1x['width'], 3) . 'x'; // attribute is in array (not in file object)
 					}
 				}
 				// Otherwise use width descriptors
 				else
 				{
-					$descriptor = $newImgSize['width'] . 'w';
+					$descriptor = $newImgSize['width'] . 'w'; // attribute is in array (not in file object)
 				}
 
 				$src .= ' ' . $descriptor;

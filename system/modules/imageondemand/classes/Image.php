@@ -7,12 +7,12 @@
  *
  * @license LGPL-3.0+
  */
- 
+
 /**
  * @package  	 ImageOnDemand
  * @author   	 Arne Stappen
  * @license  	 LGPL-3.0+ 
- * @copyright	 Arne Stappen 2011-2015
+ * @copyright	 Arne Stappen 2011-2016
  */
  
  
@@ -121,7 +121,7 @@ class Image
 		}
 
 		$this->fileObj = $file;
-		$arrAllowedTypes = array_map('trim', explode(',', \Config::get('validImageTypes')));
+		$arrAllowedTypes = trimsplit(',', strtolower(\Config::get('validImageTypes')));
 
 		// Check the file type
 		if (!in_array($this->fileObj->extension, $arrAllowedTypes))
@@ -854,19 +854,20 @@ class Image
 	{
 		$src = static::getPath($src);
 
-		if ($src == '')
+		if ($src == '' || !is_file(TL_ROOT . '/' . $src))
 		{
 			return '';
 		}
 
-		if (!is_file(TL_ROOT . '/' . $src) && strpos($src, '/g/') === false) // on demand images do not exist, so don´t care
+		if (strpos($src, '/g/') === false) // on demand images do not exist, so don´t care
 		{
 			return '';
 		}
-		
+
+		$objFile = new \File($src, true);
 		$static = (strncmp($src, 'assets/', 7) === 0) ? TL_ASSETS_URL : TL_FILES_URL;
 
-		return '<img src="' . $static . \System::urlEncode($src) . '" alt="' . specialchars($alt) . '"' . (($attributes != '') ? ' ' . $attributes : '') . '>';
+		return '<img src="' . $static . \System::urlEncode($src) . '" width="' . $objFile->width . '" height="' . $objFile->height . '" alt="' . specialchars($alt) . '"' . (($attributes != '') ? ' ' . $attributes : '') . '>';
 	}
 
 
