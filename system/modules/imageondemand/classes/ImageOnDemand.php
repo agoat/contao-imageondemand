@@ -20,8 +20,9 @@ class ImageOnDemand extends Frontend
 	// generate special image path to on demand script instead of generating the image now
 	public function GetImageHook($OriginalPath, $TargetWidth, $TargetHeight, $ResizeMode, $CacheName, $fileObj, $TargetPath, $ImageData) 
 	{ 
+
 		if ($TargetPath) return false; // stop here if images are uploaded
-		if ((strpos(\Environment::get('request'),'assets') === false) && !(($TargetWidth == 699 && $TargetHeight == 524) || ($TargetWidth == 80 && $TargetHeight == 60)))
+		if ((strpos(\Environment::get('request'),'assets') === false) && !(($TargetWidth == 699 && $TargetHeight == 524) || ($TargetWidth == 80 && $TargetHeight == 60) || $fileObj->extension == 'svg'))
 		{			
 
 			// get image cachename
