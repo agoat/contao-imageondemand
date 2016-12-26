@@ -275,7 +275,7 @@ class Picture
 				{
 					if ($newImgSize['width'] && $file1x['width']) // attribute is in array (not in file object)
 					{
-						$descriptor = round($newImgSize['width'] / $file1x['width'], 3) . 'x'; // attribute is in array (not in file object)
+						$descriptor = rtrim(sprintf('%.3F', $newImgSize['width'] / $file1x['width']), '.0') . 'x';	// attribute is in array (not in file object)
 					}
 				}
 				// Otherwise use width descriptors

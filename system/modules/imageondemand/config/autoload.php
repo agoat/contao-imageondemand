@@ -20,7 +20,7 @@ ClassLoader::addClasses(array
 (
 	'Contao\ImageOnDemand' => 'system/modules/imageondemand/classes/ImageOnDemand.php',
 	'Contao\Picture' => 'system/modules/imageondemand/classes/Picture.php', // Overwrite Picture class
-	'Contao\Image' => 'system/modules/imageondemand/classes/Image.php' // Overwrite Image class
-
+	'Contao\Image' => 'system/modules/imageondemand/classes/Image.php', // Overwrite Image class
+	'Contao\File' => 'system/modules/imageondemand/classes/File.php' // Overwrite File class
 ));
 
